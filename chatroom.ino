@@ -3,7 +3,7 @@
 #include <DNSServer.h>
 
 const char* ssid = "name it ur down thingy after you downloaded";
-//sometimes it auto connects you but if not just put in "192.169.4.1" in your b
+//sometimes it auto connects you but if not just put in "192.169.4.1" 
 DNSServer dnsServer;
 WebServer server(80);
 
@@ -13,7 +13,7 @@ const char CHAT_PAGE[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-  <title>vincent.com chat</title>
+  <title>ur chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body { font-family: Arial; background:#111; color:#fff; }
@@ -22,9 +22,9 @@ const char CHAT_PAGE[] PROGMEM = R"rawliteral(
   </style>
 </head>
 <body>
-  <h2>(name it what ever you want) chat</h2>            //name your chat room(it don't really mater it will still work)
+  <h2>ur chat</h2>
   <div id="chat"></div>
-  <input id="messages" placeholder="Type message..." />
+  <input id="msg" placeholder="Type message..." />
   <button onclick="send()">Send</button>
 
 <script>
@@ -47,6 +47,7 @@ load();
 </body>
 </html>
 )rawliteral";
+
 void handleRoot() {
   server.send(200, "text/html", CHAT_PAGE);
 }
@@ -54,13 +55,15 @@ void handleRoot() {
 void handleMessages() {
   server.send(200, "text/html", messages);
 }
+
 void handleSend() {
   if (server.hasArg("m")) {
     messages += "<p>" + server.arg("m") + "</p>";
-    if (messages.length() > 6000) messages = "";
+    if (messages.length() > 6000) messages = ""; // prevent memory overflow
   }
   server.send(200, "text/plain", "ok");
 }
+
 void setup() {
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid);
